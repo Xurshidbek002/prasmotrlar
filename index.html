@@ -7,6 +7,8 @@
     <style>
       /* Umumiy sahifa styling */
       body {
+        padding-left: 10px;
+        padding-right: 10px;
         margin: 0;
         font-family: Arial, sans-serif;
         display: flex;
@@ -25,15 +27,13 @@
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.361);
         padding: 20px 30px;
         width: 90%;
-        max-width: 320px;
+        max-width: 280px;
         backdrop-filter: blur(10px);
         margin-bottom: 20px;
       }
 
       /* Sarlavha styling */
       .form-container h2 {
-        /* display: flex; */
-        /* justify-content: center; */
         text-align: center;
         margin-bottom: 20px;
       }
@@ -55,6 +55,7 @@
       .form-container input:focus {
         transform: scale(102%);
         transition: all 0.5s;
+        placeholder: ''; /* Placeholder matnini yo'qotish */
       }
 
       /* Tugma styling */
@@ -84,20 +85,19 @@
         background: rgba(183, 108, 86, 0.508);
         border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 0 10px #9155554a
+        box-shadow: 0 0 10px #9155554a;
       }
 
       th,
       td {
         padding: 10px;
-        text-align: left;
+        text-align: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       }
 
       th {
         background-color: rgba(255, 255, 255, 0.2);
       }
-
     </style>
   </head>
   <body>
@@ -105,11 +105,26 @@
       <h2>Kerakli malumotlar kiritilsin</h2>
       <input
         type="number"
-        id="rubToSum"
-        placeholder="1000 rubl so'mda qancha?"
+        id="amountPerMillionViews"
+        placeholder="Qancha to'layabdi MLN-ga"
+        onfocus="this.placeholder=''"
+        onblur="this.placeholder='Qancha to'layabdi MLN-ga'"
       />
-      <input type="number" id="views" placeholder="Ko'rishlar soni" />
-      <button onclick="calculateEarnings()">Qani barakasini bersin😁</button>
+      <input
+        type="number"
+        id="rubAmount"
+        placeholder="1000 rubl so'mda qancha?"
+        onfocus="this.placeholder=''"
+        onblur="this.placeholder='1000 rubl so'mda qancha?'"
+      />
+      <input
+        type="number"
+        id="views"
+        placeholder="Prasmotr soni"
+        onfocus="this.placeholder=''"
+        onblur="this.placeholder='Prasmotr soni'"
+      />
+      <button onclick="calculateEarnings()">Hisoblash</button>
     </div>
 
     <!-- Jadval -->
@@ -128,25 +143,30 @@
 
     <script>
       function calculateEarnings() {
-        const rubToSum = parseFloat(document.getElementById("rubToSum").value);
+        const amountPerMillionViews = parseFloat(
+          document.getElementById("amountPerMillionViews").value
+        );
+        const rubAmount = parseFloat(
+          document.getElementById("rubAmount").value
+        );
         const views = parseInt(document.getElementById("views").value);
 
-        if (isNaN(rubToSum) || isNaN(views)) {
-          alert("Kiritib Keyin bossangchi");
+        if (isNaN(amountPerMillionViews) || isNaN(rubAmount) || isNaN(views)) {
+          alert("Iltimos, barcha maydonlarni to'ldiring.");
           return;
         }
 
-        const rubPerMillionViews = 3000;
-        const totalRub = (views / 1000000) * rubPerMillionViews;
-        const totalSum = (totalRub * rubToSum) / 1000;
+        // Hisoblash
+        const totalRub = (views / 1000000) * amountPerMillionViews; // Berilgan prasmotrlar uchun to'lanadigan summa
+        const totalSum = (totalRub * rubAmount) / 1000; // Rubl so'mga aylantirish
 
         // Jadvalga natijani qo'shish
         const resultsTable = document.getElementById("resultsTable");
         const newRow = resultsTable.insertRow();
         newRow.innerHTML = `
         <td>${views.toLocaleString()}</td>
-        <td>${rubToSum.toFixed(2)}</td>
-        <td>${totalSum.toFixed(2)} so'm</td>
+        <td>${rubAmount.toFixed(2)}</td>
+        <td>${totalSum.toFixed(2)}</td>
       `;
       }
     </script>
